@@ -126,7 +126,6 @@ body {
           <ul class="nav navbar-nav navbar-right">
             <li><a href={% url 'password_change' %}><span class="glyphicon glyphicon-log-out"></span> &nbsp; Change Password</a></li>
             <li><a href="{% url 'profile' %}"><span class="glyphicon glyphicon-log-out"></span> &nbsp; Profile</a></li>
-            <li><a href=""><span class="glyphicon glyphicon-log-out"></span> &nbsp; Change Username</a></li>
             <li><a href="{% url "login" %}"><span class="glyphicon glyphicon-log-out"></span> &nbsp; Logout</a></li>
             {% else %}
             <li><a href="{% url "register" %}"><span class="glyphicon glyphicon-user"></span> &nbsp; Sign up</a></li>
