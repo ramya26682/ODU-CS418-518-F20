@@ -1,23 +1,29 @@
 {% load crispy_forms_tags %}
 {% block start %}
 
+<style>
+	body { 
+  background: lightblue no-repeat fixed center; 
+}
+</style>
+<body>
 <div class="container">
   <div style="text-align: center;">
 <div style="display: inline-block; text-align: left;">
-<h1>Change Username</h1>
-<div class="content-section col-md-8 col-md-offset-2">
-  <form method="POST" style="border: 1px solid black; margin: 4%; padding:10%; border-radius:1%;">
-    {% csrf_token %} 
-    <p>{{ id }}</p>
-    <p>{{ name }}</p>
-    <p>{{ email }}</p>
-
-    <fieldset class="form-group">
-      
-    </fieldset>
+<h1>User profile</h1>
+<a><button>Update profile</button></a>
+<form method="POST" style="border: 1px solid black; margin: 4%; padding:10%; border-radius:1%;">
+    {% csrf_token %}
+    <fieldset>
+    	<legend> Profile</legend>
+    	<p>{{ user.id }}</p>
+    	<p>{{ user.username }}</p>
+    	<p>{{ user.email }}</p>
+    </fieldset> 
   </form>
+
 </div>
 </div>
 </div>
-</div>
+</body>
 {% endblock start %}

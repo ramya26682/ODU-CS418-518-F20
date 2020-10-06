@@ -21,9 +21,9 @@ from django.contrib.auth.models import User
 from django.core.mail import EmailMessage
   
 
-# @login_required(login_url='login')
-# def index(request): 
-#     return render(request, 'dl_app/index.html', {'title':'index'}) 
+@login_required(login_url='login')
+def index(request): 
+    return render(request, 'dl_app/index.html', {'title':'index'}) 
    
 
 def register(request): 
@@ -85,10 +85,7 @@ def Login(request):
     form = AuthenticationForm() 
     return render(request, 'dl_app/login.html', {'form':form, 'title':'log in'})
 
-def index(request,user_id):
-    user=User.objects.get(pk=user_id)
-    print(user)
-    return render(request, 'dl_app/index.html', {'title':'index'}) 
+
    
 def forget_password(request): 
     if request.method == 'POST': 
@@ -117,5 +114,6 @@ def profile(request):
     else:
         print('--> username : ', request.user)
         print('--> id : ', request.user.id)
+        userDetails = User.objects.get(pk = request.user.id)
         form = UserRegisterForm()
-    return render(request, 'dl_app/profile.html', {'form': form,'title':'reqister here', 'name':request.user,'id':request.user.id,'email':request.user.email})
+    return render(request, 'dl_app/profile.html', {'form': form,'title':'reqister here','user':userDetails , 'name':request.user,'id':request.user.id,'email':request.user.email})
