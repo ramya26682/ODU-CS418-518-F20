@@ -1,6 +1,11 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+
 
 {% load crispy_forms_tags %}
-{% block start %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -41,30 +46,8 @@
 
   {% endfor %}
   {% endif %}
-<body style="background: lightblue no-repeat fixed center;" class="container-fluid">
 
-  <header class="row">
-
-    <!-- navbar-->
-    <nav class="navbar navbar-inverse navbar-fixed-top">
-      <div class="container-fluid">
-        <div class="navbar-header">
-          <button class="navbar-toggle" data-toggle="collapse" data-target="#mainNavBar">
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-
-
-          </ul>
-        </div>
-      </div>
-    </nav>
-  </header>
-  <br/>
-  <br>
-  <br>
+<body  style='background-image: url("https://i.pinimg.com/originals/a6/4b/f9/a64bf98ef5652a55fdd6c4ef2e871099.png");padding:100px;' class="container-fluid">
  <div class="content-section col-md-8 col-md-offset-2">
   <center>
 
@@ -74,7 +57,7 @@
       {{ form|crispy}}
     </fieldset>
    <center>
-    <button style="background: black; font-size: 2rem; padding:1%;" class="btn btn-outline-info" type="submit"><span class="glyphicon glyphicon-log-in"></span> &nbsp; login</button>
+    <button style="background: #ffbe42; font-size: 2rem; padding:1%;" class="btn btn-outline-info" type="submit"><span class="glyphicon glyphicon-log-in"></span> &nbsp; login</button>
   </center>
   <br/>
   <sub style="text-align: center;"><a href="{% url 'register' %}" style=" font-size:17px;text-decoration: none; color: blue; padding:2%; cursor:pointer; margin-right:2%;">Regsiter</a></sub>
@@ -83,4 +66,4 @@
   </form>
 </center>
  </div>
-{% endblock start %}
+{% endblock %}

@@ -1,0 +1,56 @@
+<nav class="navbar navbar-expand-lg navbar-light" style="background-color: #ffbe42;">
+  <!-- Container wrapper -->
+  <div class="container-fluid">
+    <!-- Toggle button -->
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-toggle="collapse"
+      data-target="#navbarRightAlignExample"
+      aria-controls="navbarRightAlignExample"
+      aria-expanded="false"
+      aria-label="Toggle navigation">
+      <i class="fas fa-bars"></i>
+    </button>
+    <!-- Collapsible wrapper -->
+    {% if user.is_authenticated %}
+    <div class="collapse navbar-collapse" id="navbarRightAlignExample">
+      <!-- Left links -->
+      <ul class="navbar-nav ml-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="#">Welcome {{request.user}}</a>
+        </li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li class="nav-item">
+          <a class="nav-link" href="/search">Search</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'password_change' %}">Change Password</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/edit">Upload Data</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'profile' %}"><span class="glyphicon glyphicon-user"></span> Profile</a>
+        </li>
+        <li class="nav-item">
+         <a class="nav-link" href="{% url 'login' %}"><span class="glyphicon glyphicon-log-in"></span> Logout</a>
+        </li>
+      </ul>
+      {% else %}
+      <ul class="navbar-nav ml-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a href="{% url 'register' %}"><span class="glyphicon glyphicon-user"></span>Sign up</a>
+        </li>
+        <li class="nav-item">
+         <a href="{% url 'login' %}"><span class="glyphicon glyphicon-log-in"></span> Login</a>
+        </li>
+      </ul>
+      {% endif %}
+      <!-- Left links -->
+    </div>
+
+ </div>
+  <!-- Container wrapper -->
+</nav>

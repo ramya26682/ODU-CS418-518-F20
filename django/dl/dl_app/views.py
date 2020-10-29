@@ -3,7 +3,6 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login 
 from django.contrib.auth.decorators import login_required 
 from django.contrib.auth.forms import AuthenticationForm 
-from .forms import UserRegisterForm 
 from django.core.mail import send_mail 
 from django.core.mail import EmailMultiAlternatives 
 from django.template.loader import get_template 
@@ -19,11 +18,13 @@ from django.template.loader import render_to_string
 from .token_generator import account_activation_token
 from django.contrib.auth.models import User
 from django.core.mail import EmailMessage
-  
-
-@login_required(login_url='login')
-def index(request): 
-    return render(request, 'dl_app/index.html', {'title':'index'}) 
+from django.contrib.auth.models import User
+from .forms import UserRegisterForm 
+from .models import Profile
+from .forms import EditProfileForm,UserProfileForm
+from .es_test import AdvancedSearch, Singlesearch, updateIndex
+from django.core.files.storage import FileSystemStorage
+ 
    
 
 def register(request): 
@@ -73,20 +74,19 @@ def Login(request):
         username = request.POST['username']
         password = request.POST['password'] 
         user = authenticate(request, username = username, password = password) 
-        # print(user.id)
         if user is not None: 
             form = login(request, user) 
             messages.success(request, f' wecome {username} !!')
             user=User.objects.get(username=username)
             print(user)
-            return render(request,'dl_app/index.html',{'username':username}) 
+            return redirect('/index/')
+            #return render(request,'dl_app/index.html',{'username':username}) 
         else: 
             return render(request,'dl_app/error.html') 
     form = AuthenticationForm() 
     return render(request, 'dl_app/login.html', {'form':form, 'title':'log in'})
 
 
-   
 def forget_password(request): 
     if request.method == 'POST': 
         form = UserRegisterForm(request.POST) 
@@ -108,12 +108,91 @@ def forget_password(request):
     return render(request, 'dl_app/forget_password.html', {'form': form, 'title':'reqister here'})
 
 
-def profile(request):
-    if request.method == 'POST':
-        print(request)
-    else:
-        print('--> username : ', request.user)
-        print('--> id : ', request.user.id)
-        userDetails = User.objects.get(pk = request.user.id)
-        form = UserRegisterForm()
-    return render(request, 'dl_app/profile.html', {'form': form,'title':'reqister here','user':userDetails , 'name':request.user,'id':request.user.id,'email':request.user.email})
+@login_required
+def profiledetails(request):
+    if request.method == "POST":
+        user_form = UserProfileForm(request.POST, instance=request.user)
+        profile_form = EditProfileForm(request.POST, instance=request.user.profile)
+        if user_form.is_valid():
+            user_form.save()
+        elif profile_form.is_valid():
+            profile_form.save()
+        else:
+            messages.error(request,('Unable to complete request'))
+        return redirect ("/dl_app/profile")
+    user_form = UserProfileForm(instance=request.user)
+    profile_form = EditProfileForm(instance=request.user.profile)
+    return render(request=request, template_name="dl_app/profile.html", context={"user":request.user, "form":user_form, "profile_form":profile_form })
+
+def logout_request(request):
+    logout(request)
+    messages.info(request, "You have successfully logged out.") 
+    return redirect("dl_app/index")
+
+@login_required
+def advanced_search(request):
+    return render(request,'dl_app/advanced.html')
+
+#advanced search
+@login_required
+def search(request):
+    return render(request,'dl_app/search.html')
+
+
+
+@login_required
+def Advancedsearch(request):
+    results=[]
+    testpatentID=""
+    testaspect=""
+    if request.POST.get('patentID') and request.POST.get('aspect'):
+        testpatentID=request.POST.get('patentID')
+        testpid=request.POST.get('aspect')
+    elif request.POST.get('patentID'):
+        testpatentID=name=request.POST.get('patentID')
+    elif request.POST.get('aspect'):
+        testaspect=request.POST.get('aspect')
+    results=AdvancedSearch(patentID=testpatentID,aspect=testaspect)
+    print(results)
+    context={
+    'results':results,
+    'request.user':'request.user'
+    }
+    return render(request,'dl_app/Advanced.html',context)
+
+
+@login_required
+def samplesearch(request):
+    results=[]
+    text=""
+    print(request.POST)
+    if request.POST.get('pid'):
+        text=request.POST.get('pid')
+    results=Singlesearch(Q_text=text)
+    print(results)
+    context={
+    'results':results,
+    'request.user':'request.user'
+    }
+    return render(request,'dl_app/search.html',context)
+
+@login_required
+def editjson(request):
+    #if request.POST.get(patentID) and request.POST.get(pid) and request.POST.get(is_multiple) and request.POST.get(origreftext) and request.POST.get(figid) and request.POST.get(subfig) and request.POST.get(is_caption) and request.POST.get(description) and request.POST.get(aspect) and request.POST.get(objects):
+    if request.method == "POST":
+        # save file
+        print(request.POST)
+        myfile = request.FILES['myfile']
+        print(myfile.name)
+        fs = FileSystemStorage()
+        print(request.POST['patentID'])
+        print(request.POST['pid'])
+        filename = request.POST['patentID'] + '-D0' + str(request.POST['pid'])[2:]+'.png'
+        print(filename)
+        fs.save(filename, myfile)
+        if updateIndex(request.POST):
+            return render(request,'dl_app/messgae.html',context = {'message': 'Index Updated and File Uploaded !!!'})
+        else:
+            return render(request,'dl_app/messgae.html',context = {'message': 'update index failed !!!'}) 
+
+    return render(request, 'dl_app/editform.html')

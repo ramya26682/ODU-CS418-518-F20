@@ -4,42 +4,47 @@
 {% block content %}
 
 {% include 'dl_app/nav.html' %}
+
 <style>
 #image{
   text-align: center;
   background-image: url("https://i.pinimg.com/originals/a6/4b/f9/a64bf98ef5652a55fdd6c4ef2e871099.png");
   background-size: cover;
-  padding: 140px;
+  padding: 120px;
   max-width: 100%;
   height: auto;
     }
 </style>
 <div id=image>
-  <h1>Search</h1>
+<h1 >Advanced Search</h1>
 <div class="search-container">
-     <form method="post">
+   <form method="post">
         {% csrf_token %}
-         <div id="container" style="text-align: center;">
+        <div id="container" style="text-align: center;">
   <p id="patentID">
-    <input type="text" name="pid" class="form-control" placeholder="Enter any value">
+    <input type="text" name="patentID" class="form-control" placeholder="Enter patentID">
+  </p>
+  <p id="aspect">
+    <input type="text" name="aspect" class="form-control" placeholder="Enter aspect">
   </p>
   <button type="submit" class="btn btn-primary">Search</button>
-  <button type="submit" class="btn btn-success"> <a href="/advanced">Advanced Search</a></button>
-
 </div>
     </form>
-  </div>
 
+<!-- Header -->
   {% if results %}
- <div class="card-columns">
+
+<div class="card-columns">
   {% for x in results %}
   <div class="card">
     <img class="card-img-top" src="/media/{{ x.2 }}" alt="Card image cap" width="60px",height="60px">
     <div class="card-footer">
-      <small class="text-muted">{{ x.0 }},{{ x.1 }},{{ x.2 }}</small>
+      <small class="text-muted">{{ x.0 }},{{ x.1 }},{{ x.2 }},{{ x.3 }}</small>
     </div>
   </div>
   {% endfor %}
+</div>
+</div>
   {% else %}
   <p>Please enter a valid search</p>
 </div>

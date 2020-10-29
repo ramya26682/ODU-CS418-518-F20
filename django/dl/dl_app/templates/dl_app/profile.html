@@ -1,29 +1,72 @@
+{% extends 'base.html' %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+
+{% include 'dl_app/nav.html' %}
+
 {% load crispy_forms_tags %}
-{% block start %}
-
-<style>
-	body { 
-  background: lightblue no-repeat fixed center; 
-}
-</style>
-<body>
-<div class="container">
-  <div style="text-align: center;">
-<div style="display: inline-block; text-align: left;">
-<h1>User profile</h1>
-<a><button>Update profile</button></a>
-<form method="POST" style="border: 1px solid black; margin: 4%; padding:10%; border-radius:1%;">
-    {% csrf_token %}
-    <fieldset>
-    	<legend> Profile</legend>
-    	<p>{{ user.id }}</p>
-    	<p>{{ user.username }}</p>
-    	<p>{{ user.email }}</p>
-    </fieldset> 
-  </form>
-
+<!--User-->
+<br><br>
+<body style="background-image: url('https://i.pinimg.com/originals/a6/4b/f9/a64bf98ef5652a55fdd6c4ef2e871099.png');">
+<div class="container mx-auto">
+    <div class="text-center">
+        <div class="col-lg-16 col-md-16 col-lg-16 pb-4">
+            <div class="card p-4" style="background-color: #ffbe42;">
+                <h4 class="card-title font-weight-bold text-center"> Hello {{ user.username|title }}</h4>
+                <hr>
+                <div class="card-text">
+                    <h2 class="text-muted mb-0" style="font-size: 18px"><b>Username:</b></h2>
+                    <h4>{{ user.username }}</h4>
+                    <h2 class="text-muted mb-0" style="font-size: 18px"><b>Email:</b></h2>
+                    <h4>{{ user.email }} </h4>
+                    <div>
+                        <div class="text-center">
+                            <submit type="button" class="btn btn-outline-success btn-sm" data-toggle="modal" data-target="#profileModal" style="font-size: 18px">Update
+                                Profile</submit>
+                        </div>
+                        <br>
+                        <div class="text-center">
+                            <a href="/password_change"><submit type="button" class="btn btn-outline-primary btn-sm" style="font-size: 18px">Change
+                                    Password</submit></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-</div>
+
+<!--Edit user modal-->
+<div class="modal fade" tabindex="-1" id="profileModal" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="text-center">
+                <h5 class="modal-title">Update Profile</h5>
+                <div class="text-right">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            </div>
+            <div class="modal-body">
+                <form method="post">
+                    {% csrf_token %}
+                <div class="form-group col-lg-16 mb-0">
+                    {{ form.username|as_crispy_field }}
+                </div>
+                <div class="form-group col-lg-16 mb-0">
+                    {{ form.email|as_crispy_field }}
+                </div>
+            </div>
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary">Save changes</button>
+                </form>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
 </div>
 </body>
-{% endblock start %}
+{% endblock %}

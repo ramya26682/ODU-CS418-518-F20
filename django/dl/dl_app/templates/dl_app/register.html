@@ -1,10 +1,15 @@
-{% extends "dl_app/index.html" %}
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+
 {% load crispy_forms_tags %}
-{% block start %}
+
 
 <style>
   body { 
-  background: lightblue no-repeat fixed center; 
+  background-image: url("https://i.pinimg.com/originals/a6/4b/f9/a64bf98ef5652a55fdd6c4ef2e871099.png");
 }
 </style>
 <body>
@@ -15,11 +20,11 @@
       {{ form|crispy}}
     </fieldset>
     <center>
-      <button style="background: black; padding:2%; font-size: 2rem; color:white;" class="btn btn-outline-info" type="submit"><span class="glyphicon glyphicon-check"></span> &nbsp; sign up</button>
+      <button style="background: #ffbe42; padding:2%; font-size: 2rem;" class="btn btn-outline-info" type="submit"><span class="glyphicon glyphicon-check"></span> &nbsp; sign up</button>
     </center>
     <br />
-    <sub><a href="{% url 'login' %}" style="text-decoration: none; color: blue; padding:3%; cursor:pointer;">Already have an account ?</a></sub>
+    <sub><a href="{% url 'login' %}" style="text-decoration: none; color: blue; padding:3%; font-size:17px; cursor:pointer;">Already have an account ?</a></sub>
   </form>
 </div>
 </body>
-{% endblock start %}
+{% endblock  %}

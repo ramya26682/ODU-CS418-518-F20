@@ -83,7 +83,7 @@ WSGI_APPLICATION = 'dl.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': "webproject",
+        'NAME': "webdb",
         'USER': 'root',
         'PASSWORD':'',
         'HOST': '127.0.0.1',
@@ -139,9 +139,11 @@ EMAIL_HOST_USER = "ramyabondalapati1@gmail.com"
 EMAIL_HOST_PASSWORD = 'Bindupp:1327'
 EMAIL_PORT = '587'
 
+
 STATIC_URL = '/static/'
 STATIC_ROOT= os.path.join(BASE_DIR,'static/')
 CRISPY_TEMPLATE_PACK='bootstrap3'
-MEDIA_ROOT= os.path.join(BASE_DIR,'media')
+MEDIA_ROOT= os.path.join(BASE_DIR,'media/')
 MEDIA_URL = '/media/'
+
 

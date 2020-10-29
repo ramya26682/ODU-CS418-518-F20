@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+
+{% include 'dl_app/nav.html' %}
+
+<body style='background-image: url("https://i.pinimg.com/originals/a6/4b/f9/a64bf98ef5652a55fdd6c4ef2e871099.png");'>
+
+<div class="container">
+	<h2 style="text-align: center;">Edit Form</h2></br></br></br>
+	
+<form method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+  <div class="row">
+    <div class="col">
+      <label for="patentID"><b>Patend ID</b></label>
+    <input type="text" class="form-control" id="patentID" name="patentID" placeholder="Enter patentID" required>
+    </div>
+    <div class="col">
+       <label for="pid"><b>P-ID</b></label>
+    <input type="text" class="form-control" id="pid" name="pid" placeholder="Enter pid">
+    </div>
+  </div>
+    <div class="row">
+    <div class="col">
+     <label for="is_multiple"><b>Is Multiple</b></label>
+    <input type="text" class="form-control" id="is_multiple" name="is_multiple" placeholder="Enter is_multiple">
+     </div>
+    <div class="col">
+     <label for="origreftext"><b>Origref text</b></label>
+    <input type="text" class="form-control" id="origreftext" name="origreftext" placeholder="Enter origreftext">
+    </div>
+  </div>
+
+    <div class="row">
+    <div class="col">
+      <label for="figid"><b>Figid</b></label>
+    <input type="text" class="form-control" id="figid" name="figid" placeholder="Enter figid" required>
+     </div>
+    <div class="col">
+     <label for="subfig"><b>Subfig</b></label>
+    <input type="text" class="form-control" id="subfig" name="subfig" placeholder="Enter subfig">
+    </div>
+  </div>
+
+    <div class="row">
+    <div class="col">
+    <label for="is_caption"><b>Is Caption</b></label>
+    <input type="text" class="form-control" id="is_caption" name="is_caption" placeholder="Enter is_caption">
+     </div>
+    <div class="col">
+     <label for="description"><b>Description</b></label>
+    <input type="text" class="form-control" id="description" name="description" placeholder="Enter description" required>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col">
+    <label for="aspect"><b>Aspect</b></label>
+    <input type="text" class="form-control" id="aspect" name="aspect" placeholder="Enter aspect" required>
+     </div>
+    <div class="col">
+     <label for="object"><b>Object</b></label>
+    <input type="text" class="form-control" id="object" name="objects" placeholder="Enter object" required>
+    </div>
+  </div>
+
+ <div class="form-group">
+    <label for="myfile"><b>Select a image:</b></label>
+    <input type="file" class="form-control" id="myfile" name="myfile" placeholder="Enter myfile" required>
+  </div>
+  <button style="text-align: center;" type="submit" class="btn btn-primary">Submit</button>
+
+
+
+</form>
+</div>
+
+
+
+
+</body>
+{% endblock %}

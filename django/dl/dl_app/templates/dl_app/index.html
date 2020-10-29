@@ -1,193 +1,19 @@
-{% load static %}
-{% load crispy_forms_tags %}
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="title" content="project">
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <meta name="language" content="English">
-  <meta name="author" content="vinayak sharma">
-
-  <title>{{title}}</title>
+{% extends 'base.html' %}
 
 
-  <!-- bootstrap file -->
-  <link rel="stylesheet" href="styles.css">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-  <!-- bootstrap file-->
-
-  <!-- jQuery -->
-  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+{% block content %}
 
 
-  <!-- main css -->
-  <link rel="stylesheet" type="text/css" href="{% static "index.css" %}" />
-
-
-  <!-- message here -->
-
-  {% if messages %}
-  {% for message in messages %}
-
-  <script>
-    alert("{{ message }}");
-  </script>
-
-  {% endfor %}
-  {% endif %}
-
-  <!--_______________________________________________-->
-
-<style>
-  * {
-  box-sizing: border-box;
-}
-
-h2{
-  text-align: center;
-}
-
-body { 
-  background: lightblue no-repeat fixed center; 
-}
-
-.topnav a{
-  text-align: right;
-  font-size: 30px;
-  padding-right: 10px;
-}
-
-.topnav .Home:active {
-  color: yellow;
-}
-
-#myInput {
-  background-image: url('/css/searchicon.png');
-  background-position: 10px 12px;
-  background-repeat: no-repeat;
-  width: 100%;
-  font-size: 16px;
-  padding: 12px 20px 12px 40px;
-  border: 1px solid #ddd;
-  margin-bottom: 12px;
-}
-
-#myUL {
-  list-style-type: none;
-  padding: 0;
-  margin: 0;
-}
-
-#myUL li a {
-  text-align: center;
-  border: 1px solid #ddd;
-  margin-top: -1px; /* Prevent double borders */
-  background-color: #f6f6f6;
-  padding: 12px;
-  text-decoration: none;
-  font-size: 18px;
-  color: black;
-  display: block
-}
-
-#myUL li a:hover:not(.header) {
-  background-color: #eee;
-}
-</style>
-
-</head>
-
-<body class="container-fluid">
-
-
-  <header class="row">
-
-    <!-- navbar-->
-    <nav class="navbar navbar-inverse navbar-fixed-top">
-      <div class="container-fluid">
-        <div class="navbar-header">
-          <button class="navbar-toggle" data-toggle="collapse" data-target="#mainNavBar">
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-           {% if user.is_authenticated %}
-          <a class="navbar-brand" class="styleheader" href=""> Welcome {{username}}</a>
-        </div>
-        <div class="collapse navbar-collapse" id="mainNavBar">
-          <ul class="nav navbar-nav navbar-right">
-            <li><a href={% url 'password_change' %}><span class="glyphicon glyphicon-log-out"></span> &nbsp; Change Password</a></li>
-            <li><a href="{% url 'profile' %}"><span class="glyphicon glyphicon-log-out"></span> &nbsp; Profile</a></li>
-            <li><a href="{% url "login" %}"><span class="glyphicon glyphicon-log-out"></span> &nbsp; Logout</a></li>
-            {% else %}
-            <li><a href="{% url "register" %}"><span class="glyphicon glyphicon-user"></span> &nbsp; Sign up</a></li>
-            <li><a href="{% url "login" %}"><span class="glyphicon glyphicon-log-in"></span> &nbsp; Log in</a></li>
-            {% endif %}
-
-          </ul>
-        </div>
-      </div>
-    </nav>
-  </header>
-  <br/>
-  <br>
-  <br>
-  <div class="row">
-    {% block start %}
-    {% if user.is_authenticated %}
-    <center>
-      <h2>Search your books</h2>
+{% include 'dl_app/nav.html' %}
 
 <div class="row">
-<div class="col-sm-11">
-<input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for book names.." title="search book name"></div>
-<div class="col-sm--2">
-<button type="button" class="btn btn-primary">Search</button></div>
-</div>
-
-<ul id="myUL">
-  <li><a href="https://www.amazon.com/gp/product/B017KNJZH8/ref=as_li_qf_sp_asin_il_tl?ie=UTF8&camp=1789&creative=9325&creativeASIN=B017KNJZH8&linkCode=as2&tag=jamesclear-20&linkId=NAP63RQQRZ4UTAIG">Don Quixote</a></li>
-  <li><a href="https://www.amazon.com/gp/product/B004EHZXVQ/ref=as_li_qf_sp_asin_il_tl?ie=UTF8&tag=jamesclear-20&camp=1789&creative=9325&linkCode=as2&creativeASIN=B004EHZXVQ&linkId=bbf8d95484e25818935c562aa0f72dde">A Tale of Two Cities</a></li>
-  <li><a href="https://www.amazon.com/gp/product/B007978OY6/ref=as_li_qf_sp_asin_il_tl?ie=UTF8&camp=1789&creative=9325&creativeASIN=B007978OY6&linkCode=as2&tag=jamesclear-20&linkId=YMTRXSPQQASAZZDF">The Lord of the Rings</a></li>
-  <li><a href="https://www.amazon.com/gp/product/B008QYT7DI/ref=as_li_qf_sp_asin_il_tl?ie=UTF8&camp=1789&creative=9325&creativeASIN=B008QYT7DI&linkCode=as2&tag=jamesclear-20&linkId=7DPYSXGF442PSIYA">The Little Prince</a></li>
-  <li><a href="https://www.amazon.com/gp/product/B0192CTMYG/ref=as_li_qf_sp_asin_il_tl?ie=UTF8&tag=jamesclear-20&camp=1789&creative=9325&linkCode=as2&creativeASIN=B0192CTMYG&linkId=91f25e1086107069f2731e933b0f1c1e">Harry Potter and the Sorcerer Stone</a></li>
-  <li><a href="https://www.amazon.com/gp/product/B000FC1RCI/ref=as_li_qf_sp_asin_il_tl?ie=UTF8&camp=1789&creative=9325&creativeASIN=B000FC1RCI&linkCode=as2&tag=jamesclear-20&linkId=HLLU4ZTLUZJEHVVK">And Then There Were None</a></li>
-  <li><a href="https://www.amazon.com/gp/product/B01C9QBKT2/ref=as_li_qf_sp_asin_il_tl?ie=UTF8&tag=jamesclear-20&camp=1789&creative=9325&linkCode=as2&creativeASIN=B01C9QBKT2&linkId=403b957cd5f9fb40af44a598626c3281">The Dream of the Red Chamber</a></li>
-  <li></li>
-</ul>
-
-    </center>
+    {% if user.is_authenticated %}
+    <center>
     {% else %}
     <center><h1>Please Login to view the page</h1></center>
     {% endif %}
     {% endblock %}
   </div>
 </body>
-<script>
-  function myFunction() {
-    var input, filter, ul, li, a, i, txtValue;
-    input = document.getElementById("myInput");
-    filter = input.value.toUpperCase();
-    ul = document.getElementById("myUL");
-    li = ul.getElementsByTagName("li");
-    for (i = 0; i < li.length; i++) {
-        a = li[i].getElementsByTagName("a")[0];
-        txtValue = a.textContent || a.innerText;
-        if (txtValue.toUpperCase().indexOf(filter) > -1) {
-            li[i].style.display = "";
-        } else {
-            li[i].style.display = "none";
-        }
-    }
-}
-</script>
 
 </html>
