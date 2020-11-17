@@ -56,11 +56,13 @@
     <fieldset class="form-group">
       {{ form|crispy}}
     </fieldset>
+   <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <div class="g-recaptcha" data-sitekey="6LfWoOMZAAAAAD0ZrkoeEf1Ffd7t4IOmS9-eHd6F"></div>
    <center>
     <button style="background: #ffbe42; font-size: 2rem; padding:1%;" class="btn btn-outline-info" type="submit"><span class="glyphicon glyphicon-log-in"></span> &nbsp; login</button>
   </center>
   <br/>
-  <sub style="text-align: center;"><a href="{% url 'register' %}" style=" font-size:17px;text-decoration: none; color: blue; padding:2%; cursor:pointer; margin-right:2%;">Regsiter</a></sub>
+  <sub style="text-align: center;"><a href="{% url 'reg' %}" style=" font-size:17px;text-decoration: none; color: blue; padding:2%; cursor:pointer; margin-right:2%;">Register</a></sub>
 
    <sub style="text-align: center;"><a href="{% url 'reset_password' %}" style=" font-size:17px;text-decoration: none; color: blue; padding:2%; cursor:pointer; margin-right:2%;">Forget Password</a></sub>
   </form>

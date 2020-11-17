@@ -8,6 +8,24 @@
 
 {% load crispy_forms_tags %}
 <!--User-->
+<style>
+.column {
+  float: left;
+  width: 30%;
+  padding: 10px;
+}
+
+.column img {
+  margin-top: 12px;
+}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+</style>
 <br><br>
 <body style="background-image: url('https://i.pinimg.com/originals/a6/4b/f9/a64bf98ef5652a55fdd6c4ef2e871099.png');">
 <div class="container mx-auto">
@@ -33,10 +51,59 @@
                         </div>
                     </div>
                 </div>
-            </div>
+                 <hr>
+<div class="header">
+        <h1>Saved Search History</h1>
         </div>
-    </div>
+
+ <table>
+    <tr>
+  <th style="width:30%">Name</th>
+  <th style="width:30%">Search value</th>
+  <th style="width:15%">Date</th>
+
+</tr>
+    {% for x in result %}
+
+<tr>
+       <td> {{ x.username }}</td>
+       <td>{{ x.search }}</td>
+       <td> {{ x.created_at }}</td>
+         {% endfor %}
+</tr>
+</table>
+<hr>
+        <!-- <h1>History</h1> -->
+        <div class="header">
+        <h1>Saved Image History</h1>
+        </div>
+        </div>
+ 
+            {% for x in search %}
+             {% if x.search == None %}
+             <p></p>
+             <div class="row">
+             {% else %}
+            <div class="column">
+                <img src="/media/{{ x.search }}" style="width:100%">
+            </div>
+            {% endif %}
+        </div>
+         {% endfor %}
+
+    <!--           {% for x in search %}
+        <div class="card-columns">
+        {%if x.search != None %}
+            <div class="card">
+<img style="text-align: center;height: 70px;width: 70px"class="card-img-top" src="/media/{{ x.search }}" alt="Card image cap" width="5px",height="10px">
 </div>
+</div>
+{% endif %}
+
+  {% endfor %} -->
+</div>
+    </div>
+    </div>
 
 <!--Edit user modal-->
 <div class="modal fade" tabindex="-1" id="profileModal" role="dialog">

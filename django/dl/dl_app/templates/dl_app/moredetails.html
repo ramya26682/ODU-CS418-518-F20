@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+{% include 'dl_app/nav.html' %}
+<style>
+img{
+  /*text-align: center;*/
+  background-size: cover;
+  padding: 70px;
+  max-width: 180%;
+  height: auto;
+    }
+</style>
+<div class="center">
+ <div class="card-columns">
+  {% for x in ret %}
+
+  {{ x }}
+   {% endfor %}
+   {{ img }}
+   <!-- <img class="card-img-top" src="/media/USD0872995-20200121-D00006.png" alt="Card image cap" width="60px",height="60px"> -->
+   <img class="card-img-top" src="/media/{{ img }}" alt="Card image cap" width="30px",height="30px">
+
+</div>
+</div>
+
+{% endblock %}

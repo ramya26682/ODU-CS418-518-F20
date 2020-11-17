@@ -146,4 +146,5 @@ CRISPY_TEMPLATE_PACK='bootstrap3'
 MEDIA_ROOT= os.path.join(BASE_DIR,'media/')
 MEDIA_URL = '/media/'
 
-
+# Recaptcha key
+GOOGLE_RECAPTCHA_SECRET_KEY = '6LfWoOMZAAAAAKk4Alyw4QkASIkx4zGcmO-uewjf'

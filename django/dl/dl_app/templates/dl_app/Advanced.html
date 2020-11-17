@@ -4,6 +4,7 @@
 {% block content %}
 
 {% include 'dl_app/nav.html' %}
+{% load extras %}
 
 <style>
 #image{
@@ -32,16 +33,76 @@
     </form>
 
 <!-- Header -->
-  {% if results %}
+
+
+<div class='pagination-panel'>
+    {% if paginator.has_other_pages %}
+    <ul class="pagination">
+        {% if paginator.number == 1 %}
+            <li class="page-item disabled"><span class="page-link">⇤</span></li>
+        {% else %}
+            <li><a class="page-link" href="?page=1&q1={{ query.q1 }}&q2={{ query.q2 }}">⇤</a></li>
+        {% endif %}
+        {% if paginator.has_previous %}
+        <li class="page-item">
+            <a class="page-link"
+                href="?page={{ paginator.get_prev_page }}&q1={{ query.q1 }}&q2={{ query.q2 }}">&laquo;</a>
+        </li>
+        {% else %}
+            <li class="page-item disabled"><span class="page-link">&laquo;</span></li>
+        {% endif %}
+            {% for i in paginator|paginate_utils:paginator.number %}
+                {% if paginator.number == i %}
+                    <li class="page-item active"><span class="page-link">{{ i }} <span class="sr-only">(current)</span></span></li>
+                {% else %}
+                    <li class="page-item"><a class="page-link"
+                        href="?page={{ i }}&q1={{ query.q1 }}&q2={{ query.q2 }}">{{ i }}</a></li>
+            {% endif %}
+        {% endfor %}
+        {% if paginator.has_next %}
+            <li class="page-item"><a class="page-link"
+                href="?page={{ paginator.get_next_page }}&q1={{ query.q1 }}&q2={{ query.q2 }}">&raquo;</a></li>
+        {% else %}
+            <li class="page-item disabled"><span class="page-link">&raquo;</span></li>
+        {% endif %}
+        {% if paginator.number == paginator.num_pages %}
+            <li class="page-item disabled"><span class="page-link">⇥</span></li>
+        {% else %}
+            <li><a class="page-link"
+                href="?page={{ paginator.num_pages }}&q1={{ query.q1 }}&q2={{ query.q2 }}">⇥</a></li>
+        {% endif %}
+    </ul>
+    <hr>
+    {% endif %}
+</div>
+
+
+  {% if users %}
 
 <div class="card-columns">
-  {% for x in results %}
+  {% for x in users %}
   <div class="card">
     <img class="card-img-top" src="/media/{{ x.2 }}" alt="Card image cap" width="60px",height="60px">
     <div class="card-footer">
       <small class="text-muted">{{ x.0 }},{{ x.1 }},{{ x.2 }},{{ x.3 }}</small>
     </div>
+    <form method="post" action="">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-outline-info" name="save" id="some_value" value="{{ x.2 }}">Save</button>
+      <!-- <button type="submit" name="save" id="some_value" value="{{ x.2 }}">Save</button> -->
+      </form>
   </div>
+
+
+{{ x.2|highlight:patentID }}
+{{ x.1|highlight:patentID }}
+{{ x.0|highlight:patentID }}
+{{ x.3|highlight:patentID }}
+
+{{ x.2|highlight:aspect }}
+{{ x.1|highlight:aspect }}
+{{ x.0|highlight:aspect }}
+{{ x.3|highlight:aspect }}
   {% endfor %}
 </div>
 </div>

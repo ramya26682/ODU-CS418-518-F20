@@ -1,9 +1,10 @@
 {% extends 'base.html' %}
-
-
 {% block content %}
 
 {% include 'dl_app/nav.html' %}
+{{ text }}
+{% load extras %}
+
 <style>
 #image{
   text-align: center;
@@ -13,7 +14,11 @@
   max-width: 100%;
   height: auto;
     }
+.highlight {
+  background-color: yellow;
+}
 </style>
+<body>
 <div id=image>
   <h1>Search</h1>
 <div class="search-container">
@@ -21,21 +26,104 @@
         {% csrf_token %}
          <div id="container" style="text-align: center;">
   <p id="patentID">
-    <input type="text" name="pid" class="form-control" placeholder="Enter any value">
+    <input type="text" name="pid" id="inputText" class="form-control" placeholder="Enter any value">
   </p>
   <button type="submit" class="btn btn-primary">Search</button>
   <button type="submit" class="btn btn-success"> <a href="/advanced">Advanced Search</a></button>
 
 </div>
+
     </form>
   </div>
+ <h2> Total search results: {{ count }} for {{ text }}</h2>
 
+<!--pagination-->
+<hr>
+<div class='pagination-panel'>
+    {% if paginator.has_other_pages %}
+    <ul class="pagination">
+        {% if paginator.number == 1 %}
+            <li class="page-item disabled"><span class="page-link">⇤</span></li>
+        {% else %}
+            <li><a class="page-link" href="?page=1&q={{ query.q }}">⇤</a></li>
+        {% endif %}
+        {% if paginator.has_previous %}
+        <li class="page-item">
+            <a class="page-link"
+                href="?page={{ paginator.get_prev_page }}&q={{ query.q }}">&laquo;</a>
+        </li>
+        {% else %}
+            <li class="page-item disabled"><span class="page-link">&laquo;</span></li>
+        {% endif %}
+            {% for i in paginator|paginate_utils:paginator.number %}
+                {% if paginator.number == i %}
+                    <li class="page-item active"><span class="page-link">{{ i }} <span class="sr-only">(current)</span></span></li>
+                {% else %}
+                    <li class="page-item"><a class="page-link"
+                        href="?page={{ i }}&q={{ query.q }}">{{ i }}</a></li>
+            {% endif %}
+        {% endfor %}
+        {% if paginator.has_next %}
+            <li class="page-item"><a class="page-link"
+                href="?page={{ paginator.get_next_page }}&q={{ query.q }}">&raquo;</a></li>
+        {% else %}
+            <li class="page-item disabled"><span class="page-link">&raquo;</span></li>
+        {% endif %}
+        {% if paginator.number == paginator.num_pages %}
+            <li class="page-item disabled"><span class="page-link">⇥</span></li>
+        {% else %}
+            <li><a class="page-link"
+                href="?page={{ paginator.num_pages }}&q={{ query.q }}">⇥</a></li>
+        {% endif %}
+    </ul>
+    <hr>
+    {% endif %}
+</div>
+
+  {% if users %}
+   <div class="card-columns">
+   {% for x in users %}
+  <div class="card">
+    <img class="card-img-top" src="/media/{{ x.2 }}" alt="Card image cap" width="5px",height="10px">
+    <div class="card-footer">
+      <h4><a href="/moredetails/?getitem={{ x }}">Click here to see more details</a></h4>
+      <small class="text-muted">{{ x.0 }},{{ x.1 }},{{ x.2 }}</small>
+      <form method="post" action="">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-outline-info" name="save" id="some_value" value="{{ x.2 }}">Save</button>
+      <!-- <button type="submit" name="save" id="some_value" value="{{ x.2 }}">Save</button> -->
+      </form>
+    </div>
+  </div>
+{{ x.2|highlight:text }}
+{{ x.1|highlight:text }}
+{{ x.0|highlight:text }}
+
+  {% endfor %}
+  {% else %}
+  <p>Please enter a valid search</p>
+</div>
+  {% endif %}
+
+</div>
+
+</body>
+{% endblock %}
+
+
+
+
+
+
+  <!-- {{ p }} -->
+<!-- 
   {% if results %}
  <div class="card-columns">
   {% for x in results %}
   <div class="card">
-    <img class="card-img-top" src="/media/{{ x.2 }}" alt="Card image cap" width="60px",height="60px">
+    <img class="card-img-top" src="/media/{{ x.2 }}" alt="Card image cap" width="5px",height="10px">
     <div class="card-footer">
+      <h4><a href="/moredetails/?getitem={{ x }}">Click here to see more details</a></h4>
       <small class="text-muted">{{ x.0 }},{{ x.1 }},{{ x.2 }}</small>
     </div>
   </div>
@@ -43,5 +131,4 @@
   {% else %}
   <p>Please enter a valid search</p>
 </div>
-{% endif %}
-{% endblock %}
+{% endif %} -->
