@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+        <meta http-equiv="Pragma" content="no-cache" />
+        <meta http-equiv="Expires" content="0" />
+        <title>Speech to text conversion using JavaScript</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="stylesheet" href="style.css">
+        <link href="https://fonts.googleapis.com/css?family=Shadows+Into+Light" rel="stylesheet">
+
+    </head>
+    <style>
+      body {
+  background: #1e2440;
+  color: #f2efe2;
+  font-size: 16px;
+}
+
+
+button:focus {
+    outline: 0;
+}
+
+.mycontainer {
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 150px 100px;
+    text-align: center;
+}
+
+
+.mywebapp {
+    margin: 50px auto;
+}
+
+#textbox {
+    margin: 30px 0;
+}
+
+@media (max-width: 768px) {
+  .mycontainer {
+    width: 85vw;
+    max-width: 85vw;
+  }
+
+    button {
+        margin-bottom: 10px;
+}
+}
+    </style>
+
+    <body>
+        <div class="mycontainer">
+
+            <h1>Speech to text conversion using JavaScript</h1>
+
+            <div class="mywebapp"> 
+                <div class="input">
+                    <textarea id="textbox" rows="6"></textarea>
+                </div>         
+                <button id="start-btn" title="Start">Start</button>
+                <p id="instructions">Press the Start button</p>
+            </div>
+        </div>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="script.js"></script>
+    </body>
+    <script>
+      var SpeechRecognition = window.webkitSpeechRecognition;
+  
+var recognition = new SpeechRecognition();
+
+var Textbox = $('#textbox');
+var instructions = $('instructions');
+
+var Content = '';
+
+recognition.continuous = true;
+
+recognition.onresult = function(event) {
+
+  var current = event.resultIndex;
+
+  var transcript = event.results[current][0].transcript;
+ 
+    Content += transcript;
+    Textbox.val(Content);
+  
+};
+
+recognition.onstart = function() { 
+  instructions.text('Voice recognition is ON.');
+}
+
+recognition.onspeechend = function() {
+  instructions.text('No activity.');
+}
+
+recognition.onerror = function(event) {
+  if(event.error == 'no-speech') {
+    instructions.text('Try again.');  
+  }
+}
+
+$('#start-btn').on('click', function(e) {
+  if (Content.length) {
+    Content += ' ';
+  }
+  recognition.start();
+});
+
+Textbox.on('input', function() {
+  Content = $(this).val();
+})
+    </script>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- <!doctype html>
+  <head>
+    <style>
+      /* CSS comes here */
+      body {
+          font-family: arial;
+      }
+      button {
+          padding:10px;
+          background-color:#6a67ce;
+          color: #FFFFFF;
+          border: 0px;
+          cursor:pointer;
+          border-radius: 5px;
+      }
+      #output {
+          background-color:#F9F9F9;
+          padding:10px;
+          width: 100%;
+          margin-top:20px;
+          line-height:30px;
+      }
+      .hide {
+          display:none;
+      }
+      .show {
+          display:block;
+      }
+    </style>
+    <title>JavaScript Speech to Text</title>
+  </head>
+  <body>
+    <h2>JavaScript Speech to Text</h2>
+        <p>Click on the below button and speak something...</p>
+        <p><button type="button" onclick="runSpeechRecognition()">Speech to Text</button> &nbsp; <span id="action"></span></p>
+        <div id="output" class="hide"></div>
+    <script>
+      /* JS comes here */
+        function runSpeechRecognition() {
+            // get output div reference
+            var output = document.getElementById("output");
+            // get action element reference
+            var action = document.getElementById("action");
+                // new speech recognition object
+                var SpeechRecognition = SpeechRecognition || webkitSpeechRecognition;
+                var recognition = new SpeechRecognition();
+            
+                // This runs when the speech recognition service starts
+                recognition.onstart = function() {
+                    action.innerHTML = "<small>listening, please speak...</small>";
+                };
+                
+                recognition.onspeechend = function() {
+                    action.innerHTML = "<small>stopped listening, hope you are done...</small>";
+                    recognition.stop();
+                }
+              
+                // This runs when the speech recognition service returns result
+                recognition.onresult = function(event) {
+                    var transcript = event.results[0][0].transcript;
+                    var confidence = event.results[0][0].confidence;
+                    output.innerHTML = "<b>Text:</b> " + transcript + "<br/> <b>Confidence:</b> " + confidence*100+"%";
+                    output.classList.remove("hide");
+                };
+              
+                 // start recognition
+                 recognition.start();
+          }
+    </script>
+  </body>
+</html> -->

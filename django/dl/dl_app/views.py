@@ -20,7 +20,7 @@ from django.contrib.auth.models import User
 from django.core.mail import EmailMessage
 from django.contrib.auth.models import User
 from .forms import UserRegisterForm,DSEPaginator
-from .models import Profile,search_history,history
+from .models import Profile,s_history,history
 from .forms import EditProfileForm,UserProfileForm,SearchHistoryForm
 # from .es_test import AdvancedSearch, Singlesearch, updateIndex
 from django.core.files.storage import FileSystemStorage
@@ -40,7 +40,7 @@ from elasticsearch_dsl import Search, Q
 from elasticsearch_dsl.query import MultiMatch
 from multiprocessing import Value
 from .es_test import Singlesearch,AdvancedSearch,updateIndex
-
+import speech_recognition as sr
 
 counter = Value('i',0)
 def reg(request): 
@@ -121,7 +121,6 @@ def Login(request):
             user=User.objects.get(username=username)
             print(user)
             return redirect('/index/')
-            #return render(request,'dl_app/index.html',{'username':username}) 
         else: 
             return render(request,'dl_app/error.html') 
     form = AuthenticationForm() 
@@ -149,11 +148,19 @@ def forget_password(request):
     return render(request, 'dl_app/forget_password.html', {'form': form, 'title':'reqister here'})
 
 
+
 @login_required(login_url='/login/')
 def profiledetails(request):
-    search_form = search_history.objects.filter(username=request.user)
-    searchresult_form = history.objects.filter(username=request.user)  
-    # print('request.user',search_form)
+    search_form = s_history.objects.filter(username=request.user)
+    searchresult_form = history.objects.filter(username=request.user)
+    delete=request.POST.get('image')
+    if delete==None:
+        print('none')
+    else:
+        object1 = s_history.objects.get(username=request.user,search=delete)
+        object1.delete()
+        print('object',object1)
+    print('delete',delete)
     if request.method == "POST":
         user_form = UserProfileForm(request.POST, instance=request.user)
         profile_form = EditProfileForm(request.POST, instance=request.user.profile)
@@ -201,7 +208,7 @@ def Advancedsearch(request):
             testaspect=request.POST.get('aspect')
         page=1
     imagesave=request.POST.get('save')
-    x=search_history(username=request.user,search=imagesave)
+    x=s_history(username=request.user,search=imagesave)
     x.save()
     if request.method == "GET":
         if request.GET.get('q'):
@@ -231,12 +238,9 @@ def samplesearch(request):
     if request.method == "POST":
         if request.POST.get('pid'):
             text=request.POST.get('pid')
-            y=history(username=request.user,search=text)
-            y.save()
-        page=1
     imagesave=request.POST.get('save')
     print('imagesave',imagesave)
-    x=search_history(username=request.user,search=imagesave)
+    x=s_history(username=request.user,search=imagesave)
     x.save()
     if request.method == "GET":
         if request.GET.get('q'):
@@ -245,6 +249,8 @@ def samplesearch(request):
     
     start = (page-1) * 10
     end = start + 10
+    count=start+end
+    print('count',count)
     totalResults,search,posts = Singlesearch(Q_text=text,pageLowerLimit=start,pageUpperLimit=end,page=page)
 
     context = {
@@ -253,28 +259,12 @@ def samplesearch(request):
         'paginator':posts,
         'query': { 'q' : text}
     }
-
-
-
-
-    # results=Singlesearch(Q_text=text)
-    # page = request.GET.get('page', 1)
-    # paginator = Paginator(results, 10)
-    # try:
-    #     users = paginator.page(page)
-    # except PageNotAnInteger:
-    #     users = paginator.page(1)
-    # except EmptyPage:
-    #     users = paginator.page(paginator.num_pages)
-    # context={
-    # 'results':results,
-    # 'request.user':'request.user',
-    # 'users':users,
-    # 'count':paginator.count,
-    # 'text':text
-    # }
     return render(request,'dl_app/search.html',context)
 
+# def delete(request):
+#     object = YourModel.objects.get(id=part_id)
+#     object.delete()
+#     return render(request,'ur template where you want to redirect')
 
 
 
@@ -290,26 +280,37 @@ def moredetails(request):
     print('img',imgg)
     return render(request, 'dl_app/moredetails.html',context)
 
+def imgdetails(request):
+    item = request.GET.get('imgitem')
+    imgg =item[:-11]
+    pid ="p-"+item[22:-4]
+    is_multiple=0
+    origreftext="FIG. "+item[24:-4]
+    figid=item[24:-4]
+    is_caption=1
+    index="_id: "+item[24:-4]
+    context={
+    'item':item,
+    'imgg':imgg,
+    'pid':pid,
+    'is_multiple':is_multiple,
+    'origreftext':origreftext,
+    'index':index,
+    'is_caption':is_caption,
+    'figid':figid
+    }
+    print('item',item)
+    print('imgg',imgg)
+    print('pid',pid)
+    print('is_multiple',is_multiple)
+    print('origreftext',origreftext)
+    print('index',index)
+    print('is_caption',is_caption)
+    print('figid',figid)
+    return render(request, 'dl_app/imgdetails.html',context)
 
-# @login_required
-# def samplesearch(request):
-#     results=[]
-#     text=""
-#     print(request.POST)
-#     if request.POST.get('pid'):
-#         text=request.POST.get('pid')
-#         messages.success(request,'item':+text+' saved to profile')
-#         return redirect()
-#     results=Singlesearch(Q_text=text)
-#     print(results)
-#     context={
-#     'results':results,
-#     'request.user':'request.user'
-#     }
-#     return render(request,'dl_app/search.html',context)
 @login_required
 def editjson(request):
-    #if request.POST.get(patentID) and request.POST.get(pid) and request.POST.get(is_multiple) and request.POST.get(origreftext) and request.POST.get(figid) and request.POST.get(subfig) and request.POST.get(is_caption) and request.POST.get(description) and request.POST.get(aspect) and request.POST.get(objects):
     if request.method == "POST":
         # save file
         print(request.POST)
@@ -330,5 +331,24 @@ def editjson(request):
 
 
 
+# def speech_to_text(request):
+#     data = request.POST.get('record')
+#     import speech_recognition as sr
 
+#     r = sr.Recognizer()
+#     with sr.Microphone() as source:
+#         #print("Say something!")
+#         audio = r.listen(source)
+
+#     try:
+#         # for testing purposes, we're just using the default API key
+#         # to use another API key, use `r.recognize_google(audio, key="GOOGLE_SPEECH_RECOGNITION_API_KEY")`
+#         # instead of `r.recognize_google(audio)`
+#         speech = r.recognize_google(audio)
+#     except sr.UnknownValueError:
+#         speech = "Google Speech Recognition could not understand audio"
+#     except sr.RequestError as e:
+#         speech = "Could not request results from Google Speech Recognition service; {0}".format(e)
+
+#     return render(request,'dl_app/speech.html',{'speech': speech})
 

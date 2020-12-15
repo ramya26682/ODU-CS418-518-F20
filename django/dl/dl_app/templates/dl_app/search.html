@@ -2,7 +2,7 @@
 {% block content %}
 
 {% include 'dl_app/nav.html' %}
-{{ text }}
+
 {% load extras %}
 
 <style>
@@ -17,25 +17,89 @@
 .highlight {
   background-color: yellow;
 }
+
+button:focus {
+    outline: 0;
+}
+
+.mycontainer {
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 150px 100px;
+    text-align: center;
+}
+
+
+.mywebapp {
+    margin: 50px auto;
+}
+
+#textbox {
+    margin: 30px 0;
+}
+
+@media (max-width: 768px) {
+  .mycontainer {
+    width: 85vw;
+    max-width: 85vw;
+  }
+
+    button {
+        margin-bottom: 10px;
+}
+}
+.fa {
+  font-size: 50px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.fa:hover {
+  color: darkblue;
+}
+   .fa {
+      font-size: 50px;
+      cursor: pointer;
+      user-select: none;
+   }
+   .fa-thumbs-up {
+      color: blue;
+   }
+   .fa-thumbs-down {
+      color: red;
+   }
+   .fa:hover {
+      transform: scale(1.2);
+   }
+   input{
+    color:#ff0000;
+    font: 1em/1.25em Arial, Helvetica, sans-serif;
+}
 </style>
 <body>
 <div id=image>
   <h1>Search</h1>
 <div class="search-container">
-     <form method="post">
+     <form method="post" target="_blank">
         {% csrf_token %}
          <div id="container" style="text-align: center;">
   <p id="patentID">
-    <input type="text" name="pid" id="inputText" class="form-control" placeholder="Enter any value">
+    <input type="text" name="pid" id="pid" value="{{ text }}"class="form-control" placeholder="Enter any value"><br>
+
+    <input type="button" value=" Click here to Speak" onclick="recognition.start()"> 
   </p>
   <button type="submit" class="btn btn-primary">Search</button>
+  <p id="instructions">Press the Start button</p>
   <button type="submit" class="btn btn-success"> <a href="/advanced">Advanced Search</a></button>
 
 </div>
 
+
     </form>
   </div>
- <h2> Total search results: {{ count }} for {{ text }}</h2>
+
+
+ <h2> Total search results for {{ text }}</h2>
 
 <!--pagination-->
 <hr>
@@ -85,12 +149,16 @@
    {% for x in users %}
   <div class="card">
     <img class="card-img-top" src="/media/{{ x.2 }}" alt="Card image cap" width="5px",height="10px">
+    <!-- <button onclick="myFunction(this)" class="fa fa-thumbs-up"></button> -->
     <div class="card-footer">
+      <button value="{{ x.2 }}" name="liked" onclick="myFunction(this)" class="fa fa-thumbs-up">
+  </button>
       <h4><a href="/moredetails/?getitem={{ x }}">Click here to see more details</a></h4>
-      <small class="text-muted">{{ x.0 }},{{ x.1 }},{{ x.2 }}</small>
-      <form method="post" action="">
+      <a href="/media/{{ x.2 }}" download>Click here to download the image
+</a>
+      <form method="post">
         {% csrf_token %}
-        <button type="submit" class="btn btn-outline-info" name="save" id="some_value" value="{{ x.2 }}">Save</button>
+        <button type="submit" class="btn btn-outline-info" name="save" id="some_value" value="{{ x.2 }}">Click here to Save in favorites</button>
       <!-- <button type="submit" name="save" id="some_value" value="{{ x.2 }}">Save</button> -->
       </form>
     </div>
@@ -106,29 +174,30 @@
   {% endif %}
 
 </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="script.js"></script>
 
 </body>
+<script>
+
+
+
+const SpeechRecognition = window.webkitSpeechRecognition;
+var recognition = new SpeechRecognition();
+  recognition.onresult = function(event) {
+    if (event.results.length > 0) {
+      pid.value = event.results[0][0].transcript;
+      pid.form.submit();
+    }
+  }
+
+function myFunction(x) {
+  x.classList.toggle("fa-thumbs-down");
+}
+    </script>
+
 {% endblock %}
 
 
 
 
-
-
-  <!-- {{ p }} -->
-<!-- 
-  {% if results %}
- <div class="card-columns">
-  {% for x in results %}
-  <div class="card">
-    <img class="card-img-top" src="/media/{{ x.2 }}" alt="Card image cap" width="5px",height="10px">
-    <div class="card-footer">
-      <h4><a href="/moredetails/?getitem={{ x }}">Click here to see more details</a></h4>
-      <small class="text-muted">{{ x.0 }},{{ x.1 }},{{ x.2 }}</small>
-    </div>
-  </div>
-  {% endfor %}
-  {% else %}
-  <p>Please enter a valid search</p>
-</div>
-{% endif %} -->

@@ -85,11 +85,22 @@
              <div class="row">
              {% else %}
             <div class="column">
-                <img src="/media/{{ x.search }}" style="width:100%">
+                <p><img src="/media/{{ x.search }}" style="width:100%"></p>
+                <b><h3><a href="/imgdetails/?imgitem={{ x.search }}">Click here to see the Image details</a></h3></b>
+                 <form method="post" action="">
+                  {% csrf_token %}
+                <button value="{{ x.search }}" name="image" >Delete from favorite</button>
+                </form>
+
+                <!-- <form method="post" action="">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-outline-info" name="del" id="some_value" value="{{ x.search }}">delete</button>
+              </form> -->
             </div>
             {% endif %}
         </div>
          {% endfor %}
+
 
     <!--           {% for x in search %}
         <div class="card-columns">
@@ -100,7 +111,7 @@
 </div>
 {% endif %}
 
-  {% endfor %} -->
+  {% endfor %}
 </div>
     </div>
     </div>

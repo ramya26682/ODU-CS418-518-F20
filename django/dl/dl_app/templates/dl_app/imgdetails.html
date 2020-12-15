@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+{% include 'dl_app/nav.html' %}
+<style>
+img{
+  max-width: 15%;
+    }
+p {text-align: center;}
+b {text-align: center;}
+</style>
+
+
+<div class="container">
+  <b><h4>Here are the Image Details</h4></b>
+<div style="text-align: center;">
+<div style="display: inline-block; text-align: left;">
+<ul>
+<li><img class="card-img-top" src="/media/{{ item }}" alt="Card image cap" width="30px",height="30px"><br></li>
+<li>index: {{ index }}</a></li>
+<li>patentID: {{ imgg }}</li>
+<li>pid: {{ pid }}</li>
+<li>is_multiple: {{ is_multiple }}</li>
+<li>origreftext: {{ origreftext }}</li>
+<li>figid:{{ figid }}</li>
+</ul>
+</div>
+</div>
+</div>
+{% endblock %}

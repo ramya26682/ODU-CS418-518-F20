@@ -20,8 +20,15 @@ class search_history(models.Model):
 	username=models.CharField(max_length=500,default="",blank=True)
 	search=models.CharField(max_length=500,default="P-0001",null=True)
 
+class s_history(models.Model):
+	username=models.CharField(max_length=500,default="",blank=True)
+	search=models.CharField(max_length=500,default="P-0001",null=True)
 
 class history(models.Model):
 	username=models.CharField(max_length=500,default="",blank=True)
 	search=models.CharField(max_length=500,default="P-0001",null=True)
 	created_at = models.DateField(auto_now_add=True)
+
+
+
+

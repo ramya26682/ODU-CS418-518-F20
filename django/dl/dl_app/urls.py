@@ -21,6 +21,9 @@ urlpatterns = [
     path('forget_password/', user_view.forget_password, name ='forget_password'), 
     path('edit/', views.editjson,name='edit'),
     path('moredetails/',views.moredetails,name="moredetails"),
+    path('imgdetails/',views.imgdetails,name="moredetails"),
+
+    # path("speech/",views.speech_to_text,name='speech_to_text'),
     url(r'^activate/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
         views.activate_account, name='activate'),
 
@@ -44,6 +47,7 @@ urlpatterns = [
         name='password_change_done'),
     path('password_change/', auth_views.PasswordChangeView.as_view(template_name='Passwords/password_change.html'), 
         name='password_change'),
+    url('speechtotext', TemplateView.as_view(template_name='dl_app/speechtotext.html')),
 
 
 
